@@ -49,5 +49,38 @@
             return false;
         }
 
+        public function update () {
+            $query = 'UPDATE ' .
+            $this->table . ' SET name = :name WHERE id = :id';
+            $stmt = $this->conn->prepare($query);
+
+            $this->id = htmlspecialchars(strip_tags($this->id));
+            $this->name = htmlspecialchars(strip_tags($this->name));
+            $stmt->bindParam(':name', $this->name);
+            $stmt->bindParam(':id', $this->id);
+
+            if($stmt->execute()){
+                return true;
+            }
+            printf("Error: %s.\n", $stmt->error);
+
+            return false;
+        }
+
+        public function delete (){
+            $query = 'DELETE FROM '. $this->table .' WHERE id = :id';
+            $stmt = $this->conn->prepare($query);
+
+            $this->id = htmlspecialchars(strip_tags($this->id));
+            $stmt->bindParam(':id', $this->id);
+
+            if($stmt->execute()){
+                return true;
+            }
+            printf("Error: %s.\n", $stmt->error);
+
+            return false;
+        }
+
 
     }
