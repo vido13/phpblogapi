@@ -17,9 +17,17 @@
     $result = $cat->read_single();
 
     $row = $result->fetch(PDO::FETCH_ASSOC);
-    extract($row);
-    $cat_arr = array(
-        'name' => $row['name']
-    );
+    $num = $result->rowCount();
 
-    print_r(json_encode($cat_arr));
+    if($num > 0){
+        extract($row);
+        $cat_arr = array(
+            'name' => $row['name']
+        );
+
+        print_r(json_encode($cat_arr));
+    }else{
+        echo json_encode(
+            array('message' => 'No category found')
+        );
+    }

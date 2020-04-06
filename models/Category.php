@@ -14,8 +14,11 @@
         public function read(){
             $query = 'SELECT * FROM ' . $this->table . ' ORDER BY created_at DESC';
             $stmt = $this->conn->prepare($query);
-            $stmt->execute();
-            return $stmt;
+            if($stmt->execute()){
+                return $stmt;
+            }
+            printf("Error: %s.\n", $stmt->error);
+            return false;
         }
 
         public function read_single(){
@@ -23,9 +26,28 @@
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(1, $this->id);
 
-            $stmt->execute();
-            return $stmt;
+            if($stmt->execute()){
+                return $stmt;
+            }
+            printf("Error: %s.\n", $stmt->error);
+            return false;
 
+        }
+
+        public function create(){
+            $query = 'INSERT INTO ' . $this->table . '
+            SET name = :name';
+            $stmt = $this->prepare($query);
+
+            $this->name = htmlspecialchars(strip_tags($this->name));
+            $stmt->bindParam(':name', $this->name);
+
+            if($stmt->exectue()){
+                return true;
+            }
+
+            printf("Error: %s.\n", $stmt->error);
+            return false;
         }
 
 
